@@ -16,11 +16,10 @@
 
 #pragma once
 
-#include <string>
 #include <memory>
+#include <string>
 
-#include "modules/planning/proto/planning.pb.h"
-#include "modules/storytelling/frame_manager.h"
+#include "modules/common_msgs/planning_msgs/planning.pb.h"
 #include "modules/storytelling/story_tellers/base_teller.h"
 
 namespace apollo {
@@ -31,7 +30,7 @@ class CloseToJunctionTeller : public BaseTeller {
   CloseToJunctionTeller() = delete;
   explicit CloseToJunctionTeller(
       const std::shared_ptr<FrameManager>& frame_manager)
-      : frame_manager_(frame_manager) {}
+      : BaseTeller(frame_manager) {}
   void Init(const StorytellingConfig& storytelling_conf) override;
   void Update(Stories* stories) override;
 
@@ -39,13 +38,14 @@ class CloseToJunctionTeller : public BaseTeller {
   void GetOverlaps(const apollo::planning::ADCTrajectory& adc_trajectory);
 
  private:
-  std::string junction_id_;
-  CloseToJunction::JunctionType junction_type_;
-  double junction_distance_;
   std::string clear_area_id_;
   double clear_area_distance_;
   std::string crosswalk_id_;
   double crosswalk_distance_;
+  std::string junction_id_;
+  double junction_distance_;
+  std::string pnc_junction_id_;
+  double pnc_junction_distance_;
   std::string signal_id_;
   double signal_distance_;
   std::string stop_sign_id_;
@@ -53,7 +53,6 @@ class CloseToJunctionTeller : public BaseTeller {
   std::string yield_sign_id_;
   double yield_sign_distance_;
   StorytellingConfig config_;
-  std::shared_ptr<FrameManager> frame_manager_;
 };
 
 }  // namespace storytelling
